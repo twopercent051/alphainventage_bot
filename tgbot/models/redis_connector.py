@@ -1,3 +1,6 @@
+from datetime import datetime
+from typing import List, Optional
+
 import redis
 import json
 
@@ -8,21 +11,44 @@ r = redis.Redis(host=config.rds.host, port=config.rds.port, db=config.rds.db)
 
 class RedisConnector:
     r = redis.Redis(host=config.rds.host, port=config.rds.port, db=config.rds.db)
+    db = None
+
+    db_list = ["stocks", "tickers"]
 
     @classmethod
     def redis_start(cls):
-        cls.r.set('keywords', json.dumps(list()))
+        for db in cls.db_list:
+            response = cls.r.get(db)
+            if not response:
+                cls.clear()
         logger.info('Redis connected OKK')
 
     @classmethod
-    async def update_kw_list(cls, kw_list: list):
-        cls.r.set('keywords', json.dumps(kw_list))
+    def create(cls, **data):
+        response: list = cls.get_all()
+        response.append(**data)
+        cls.r.set(cls.db, json.dumps(response))
 
     @classmethod
-    async def get_kw_list(cls):
-        response = cls.r.get('keywords')
-        if response is None:
-            return None
-        response = cls.r.get('keywords').decode('utf=8')
-        kw_list = json.loads(response)
-        return kw_list
+    def get_all(cls) -> List[dict]:
+        response = cls.r.get(cls.db)
+        if not response:
+            return
+        response = response.decode("utf-8")
+        return json.loads(response)
+
+    @classmethod
+    def clear(cls):
+        cls.r.set(cls.db, json.dumps(list()))
+
+
+class StocksRedis(RedisConnector):
+    db = "stocks"
+
+
+class TickersRedis(RedisConnector):
+    db = "tickers"
+
+    @classmethod
+    def create(cls, tickers: list):
+        cls.r.set(cls.db, json.dumps(tickers))
