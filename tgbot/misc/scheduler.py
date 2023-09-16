@@ -73,7 +73,7 @@ class SchedulerAPI:
 
     @classmethod
     async def __create_task(cls):
-        dtime = datetime.utcnow() + timedelta(hours=3, seconds=30)
+        dtime = datetime.utcnow() + timedelta(hours=3, minutes=30)
         scheduler.add_job(func=cls.main_dispatcher,
                           trigger="date",
                           run_date=dtime,
