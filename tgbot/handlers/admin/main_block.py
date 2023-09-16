@@ -4,13 +4,12 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery, FSInputFile
 from aiogram.filters import Command
 from aiogram import F, Router
-from aiogram.filters.state import StateFilter
 
-from create_bot import bot
-from .filters import AdminFilter
+from create_bot import bot, scheduler
 from .inline import InlineKeyboard
 from tgbot.misc.states import AdminFSM
 from tgbot.models.redis_connector import TickersRedis
+from ...misc.scheduler import SchedulerAPI
 from ...services.excel import ExcelFile
 
 router = Router()
@@ -44,7 +43,7 @@ async def main_block(callback: CallbackQuery, state: FSMContext):
     tickers = TickersRedis.get_all()
     excel.create_tickers_file(tickers=tickers)
     file = FSInputFile(path=file_name, filename=file_name)
-    text = "Заполните файл с тикерами в колонку"
+    text = "Заполните файл с тикерами в колонку. После загрузки файла текущий ци"
     kb = inline.home_kb()
     await state.set_state(AdminFSM.tickers)
     await callback.message.answer_document(document=file, caption=text, reply_markup=kb)
@@ -62,12 +61,8 @@ async def main_block(message: Message, state: FSMContext):
         TickersRedis.create(tickers=file_data)
         text = f"В список перезаписано {len(file_data)} тикеров"
         await state.set_state(AdminFSM.home)
-        # todo Сброс или продолжение парсинга
+        scheduler.remove_all_jobs()
+        await SchedulerAPI.main_dispatcher()
     os.remove(path=file_name)
     kb = inline.home_kb()
     await message.answer(text, reply_markup=kb)
-
-
-@router.callback_query(F.data == "processes")
-async def main_block(callback: CallbackQuery):
-    pass

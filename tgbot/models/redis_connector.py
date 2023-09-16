@@ -20,17 +20,17 @@ class RedisConnector:
         for db in cls.db_list:
             response = cls.r.get(db)
             if not response:
-                cls.clear()
+                cls.r.set(db, json.dumps(list()))
         logger.info('Redis connected OKK')
 
     @classmethod
-    def create(cls, **data):
+    def create(cls, data: dict):
         response: list = cls.get_all()
-        response.append(**data)
+        response.append(data)
         cls.r.set(cls.db, json.dumps(response))
 
     @classmethod
-    def get_all(cls) -> List[dict]:
+    def get_all(cls) -> List[dict | str]:
         response = cls.r.get(cls.db)
         if not response:
             return

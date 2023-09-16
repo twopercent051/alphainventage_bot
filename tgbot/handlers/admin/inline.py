@@ -15,6 +15,6 @@ class InlineKeyboard:
     def main_menu_kb():
         keyboard = [
             [InlineKeyboardButton(text="📈 Тикеры", callback_data="tickers")],
-            [InlineKeyboardButton(text="🧑‍💻 Процессы", callback_data="processes")],
+            # [InlineKeyboardButton(text="🧑‍💻 Текущий", callback_data="processes")],
         ]
         return InlineKeyboardMarkup(inline_keyboard=keyboard)
