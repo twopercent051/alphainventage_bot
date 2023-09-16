@@ -13,7 +13,7 @@ class RedisConnector:
     r = redis.Redis(host=config.rds.host, port=config.rds.port, db=config.rds.db)
     db = None
 
-    db_list = ["stocks", "tickers"]
+    db_list = ["stocks_alpha", "tickers"]
 
     @classmethod
     def redis_start(cls):
@@ -43,7 +43,7 @@ class RedisConnector:
 
 
 class StocksRedis(RedisConnector):
-    db = "stocks"
+    db = "stocks_alpha"
 
 
 class TickersRedis(RedisConnector):
