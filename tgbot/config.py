@@ -28,6 +28,7 @@ class TgBot:
 @dataclass
 class Miscellaneous:
     admin_group: str
+    alpha_api_token: str
 
 
 @dataclass
@@ -60,6 +61,7 @@ def load_config(path: str = None):
             db=env.str('REDIS_DB')
         ),
         misc=Miscellaneous(
-            admin_group=env.str('ADMIN_GROUP')
+            admin_group=env.str('ADMIN_GROUP'),
+            alpha_api_token=env.str("ALPHA_API_TOKEN")
         )
     )

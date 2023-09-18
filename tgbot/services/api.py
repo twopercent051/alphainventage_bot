@@ -3,10 +3,12 @@ from typing import Literal, Optional
 
 import aiohttp as aiohttp
 
+from create_bot import config
+
 
 class AlphaAPI:
     def __init__(self):
-        self.token = "demo"
+        self.token = config.misc.alpha_api_token
         self.url = "https://www.alphavantage.co/query"
 
     async def __request(self, function: Literal["OVERVIEW", "INCOME_STATEMENT"], symbol: str) -> dict:
