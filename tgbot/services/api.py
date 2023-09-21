@@ -20,6 +20,7 @@ class AlphaAPI:
     async def get_overview(self, symbol: str) -> Optional[tuple]:
         """Метод получения P/S и полное название компании"""
         result = await self.__request(function="OVERVIEW", symbol=symbol)
+        print(result)
         try:
             return float(result["PriceToSalesRatioTTM"]), result["Name"]
         except KeyError:
@@ -35,6 +36,7 @@ class AlphaAPI:
         first_total_revenue = 0
         last_total_revenue = 0
         years = len(quarters) / 4
+        quarters = quarters[:20]
         try:
             for quarter in quarters[-4:]:
                 first_total_revenue += int(float(quarter["totalRevenue"]))
@@ -48,7 +50,7 @@ class AlphaAPI:
 
 async def main():
     api = AlphaAPI()
-    result = await api.get_revenue_five_ttm(symbol="MOMO")
+    result = await api.get_overview(symbol="CLSK")
     print(result)
 
 
