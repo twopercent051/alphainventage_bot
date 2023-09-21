@@ -45,7 +45,7 @@ class AlphaAPI:
 
 async def main():
     api = AlphaAPI()
-    result = await api.get_revenue_five_ttm(symbol="AMZN")
+    result = await api.get_revenue_five_ttm(symbol="BOXL")
     print(result)
 
 

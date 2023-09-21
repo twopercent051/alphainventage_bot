@@ -56,6 +56,14 @@ class SchedulerAPI:
                             total_revenue_ttm=f"{total_revenue_ttm['ttm']} %",
                             tr_div_ps=f"{tr_div_ps} %",
                             years=total_revenue_ttm["years"])
+                text = [
+                    f"<u>{ticker}</u>\n",
+                    name_company,
+                    f"P/S: {price_to_sales}",
+                    f'TR TTM: {total_revenue_ttm["ttm"]} %',
+                    f"TR / PS: {tr_div_ps} %",
+                    f"Years: {total_revenue_ttm['years']}"
+                ]
             else:
                 data = dict(ticker=ticker,
                             name="---",
@@ -63,6 +71,9 @@ class SchedulerAPI:
                             total_revenue_ttm="---",
                             tr_div_ps="---",
                             years="---")
+                text = [f"Ticker {ticker} 404 🤷"]
+            for user in admin_ids:
+                await bot.send_message(chat_id=user, text="\n".join(text))
             StocksRedis.create(data=data)
             unprocessed_ticker = cls.__get_next_ticker()
             if not unprocessed_ticker:
