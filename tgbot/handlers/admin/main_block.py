@@ -1,3 +1,4 @@
+import asyncio
 import os
 
 from aiogram.fsm.context import FSMContext
@@ -62,6 +63,7 @@ async def main_block(message: Message, state: FSMContext):
         text = f"В список перезаписано {len(file_data)} тикеров"
         await state.set_state(AdminFSM.home)
         scheduler.remove_all_jobs()
+        await asyncio.sleep(5)
         await SchedulerAPI.main_dispatcher()
     os.remove(path=file_name)
     kb = inline.home_kb()
