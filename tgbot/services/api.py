@@ -35,17 +35,20 @@ class AlphaAPI:
         first_total_revenue = 0
         last_total_revenue = 0
         years = len(quarters) / 4
-        for quarter in quarters[-4:]:
-            first_total_revenue += int(quarter["totalRevenue"])
-        for quarter in quarters[:4]:
-            last_total_revenue += int(quarter["totalRevenue"])
-        ttm = round(((last_total_revenue - first_total_revenue) * 100 / first_total_revenue) / years, 6)
+        try:
+            for quarter in quarters[-4:]:
+                first_total_revenue += int(float(quarter["totalRevenue"]))
+            for quarter in quarters[:4]:
+                last_total_revenue += int(float(quarter["totalRevenue"]))
+            ttm = round(((last_total_revenue - first_total_revenue) * 100 / first_total_revenue) / years, 6)
+        except:
+            return
         return dict(ttm=ttm, years=years)
 
 
 async def main():
     api = AlphaAPI()
-    result = await api.get_revenue_five_ttm(symbol="BOXL")
+    result = await api.get_revenue_five_ttm(symbol="MOMO")
     print(result)
 
 
