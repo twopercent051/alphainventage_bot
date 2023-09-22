@@ -53,8 +53,8 @@ class SchedulerAPI:
                 data = dict(ticker=ticker,
                             name=name_company,
                             price_to_sales=price_to_sales,
-                            total_revenue_ttm={total_revenue_ttm['ttm']},
-                            tr_div_ps={tr_div_ps},
+                            total_revenue_ttm=total_revenue_ttm['ttm'],
+                            tr_div_ps=tr_div_ps,
                             years=total_revenue_ttm["years"])
                 text = [
                     f"<u>{ticker}</u>\n",
