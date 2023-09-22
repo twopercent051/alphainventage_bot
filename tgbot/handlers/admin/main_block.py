@@ -9,7 +9,7 @@ from aiogram import F, Router
 from create_bot import bot, scheduler
 from .inline import InlineKeyboard
 from tgbot.misc.states import AdminFSM
-from tgbot.models.redis_connector import TickersRedis
+from tgbot.models.redis_connector import TickersRedis, StocksRedis
 from ...misc.scheduler import SchedulerAPI
 from ...services.excel import ExcelFile
 
@@ -60,6 +60,7 @@ async def main_block(message: Message, state: FSMContext):
     text = "Некорректные данные"
     if file_data:
         TickersRedis.create(tickers=file_data)
+        StocksRedis.clear()
         text = f"В список перезаписано {len(file_data)} тикеров"
         await state.set_state(AdminFSM.home)
         scheduler.remove_all_jobs()
