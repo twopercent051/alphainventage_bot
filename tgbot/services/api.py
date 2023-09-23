@@ -35,8 +35,8 @@ class AlphaAPI:
             return
         first_total_revenue = 0
         last_total_revenue = 0
-        years = len(quarters) / 4
         quarters = quarters[:20]
+        years = len(quarters) / 4
         try:
             for quarter in quarters[-4:]:
                 first_total_revenue += int(float(quarter["totalRevenue"]))
