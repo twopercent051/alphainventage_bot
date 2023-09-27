@@ -15,12 +15,12 @@ class AlphaAPI:
         params = dict(function=function, symbol=symbol, apikey=self.token)
         async with aiohttp.ClientSession() as session:
             async with session.get(url=self.url, params=params) as resp:
-                return await resp.json()
+                if resp.status == 200:
+                    return await resp.json()
 
     async def get_overview(self, symbol: str) -> Optional[tuple]:
         """Метод получения P/S и полное название компании"""
         result = await self.__request(function="OVERVIEW", symbol=symbol)
-        print(result)
         try:
             return float(result["PriceToSalesRatioTTM"]), result["Name"]
         except KeyError:
