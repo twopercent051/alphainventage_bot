@@ -90,4 +90,6 @@ class SchedulerAPI:
         #                   run_date=dtime,
         #                   misfire_grace_time=None)
         scheduler.add_job(func=cls.__main_dispatcher,
-                          trigger="interval")
+                          trigger="interval",
+                          minutes=30,
+                          misfire_grace_time=None)
