@@ -40,7 +40,7 @@ class SchedulerAPI:
         StocksRedis.clear()
 
     @classmethod
-    async def __main_dispatcher(cls):
+    async def main_dispatcher(cls):
         unprocessed_ticker = cls.__get_next_ticker()
         if unprocessed_ticker:
             ticker = unprocessed_ticker.upper()
@@ -89,7 +89,7 @@ class SchedulerAPI:
         #                   trigger="date",
         #                   run_date=dtime,
         #                   misfire_grace_time=None)
-        scheduler.add_job(func=cls.__main_dispatcher,
+        scheduler.add_job(func=cls.main_dispatcher,
                           trigger="interval",
                           minutes=30,
                           misfire_grace_time=None)
