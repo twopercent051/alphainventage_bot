@@ -40,7 +40,7 @@ class SchedulerAPI:
         StocksRedis.clear()
 
     @classmethod
-    async def main_dispatcher(cls):
+    async def __main_dispatcher(cls):
         unprocessed_ticker = cls.__get_next_ticker()
         if unprocessed_ticker:
             ticker = unprocessed_ticker.upper()
@@ -80,14 +80,14 @@ class SchedulerAPI:
                 await cls.__end_of_process()
         else:
             await cls.__end_of_process()
-        await cls.__create_task()
+        # await cls.__create_task()
 
     @classmethod
-    async def __create_task(cls):
+    async def create_task(cls):
         # dtime = datetime.utcnow() + timedelta(hours=3, minutes=30)
         # scheduler.add_job(func=cls.main_dispatcher,
         #                   trigger="date",
         #                   run_date=dtime,
         #                   misfire_grace_time=None)
-        scheduler.add_job(func=cls.main_dispatcher,
+        scheduler.add_job(func=cls.__main_dispatcher,
                           trigger="interval")

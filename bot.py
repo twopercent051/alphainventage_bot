@@ -21,7 +21,7 @@ user_router = [
 
 async def main():
     logger.info("Starting bot")
-    # scheduler_jobs()
+    await SchedulerAPI.create_task()
     rds.redis_start()
     dp.include_routers(
         *admin_router,
@@ -32,7 +32,7 @@ async def main():
     try:
         scheduler.start()
         register_global_middlewares(dp, config)
-        # await bot.delete_webhook(drop_pending_updates=True)
+        await bot.delete_webhook(drop_pending_updates=True)
         await dp.start_polling(bot)
     finally:
         await dp.storage.close()
