@@ -2,6 +2,7 @@ import asyncio
 from typing import Literal, Optional
 
 import aiohttp as aiohttp
+from aiohttp import ClientConnectorError
 
 from create_bot import config
 
@@ -20,18 +21,18 @@ class AlphaAPI:
 
     async def get_overview(self, symbol: str) -> Optional[tuple]:
         """Метод получения P/S и полное название компании"""
-        result = await self.__request(function="OVERVIEW", symbol=symbol)
         try:
+            result = await self.__request(function="OVERVIEW", symbol=symbol)
             return float(result["PriceToSalesRatioTTM"]), result["Name"]
-        except KeyError:
+        except (KeyError, ClientConnectorError, Exception):
             return
 
     async def get_revenue_five_ttm(self, symbol: str) -> Optional[dict]:
         """Метод получения Total Revenue 5TTM в виде десятичной дроби с округлением 6зн"""
-        result = await self.__request(function="INCOME_STATEMENT", symbol=symbol)
         try:
+            result = await self.__request(function="INCOME_STATEMENT", symbol=symbol)
             quarters = result["quarterlyReports"]
-        except KeyError:
+        except (KeyError, ClientConnectorError, Exception):
             return
         first_total_revenue = 0
         last_total_revenue = 0
@@ -43,7 +44,7 @@ class AlphaAPI:
             for quarter in quarters[:4]:
                 last_total_revenue += int(float(quarter["totalRevenue"]))
             ttm = round(((last_total_revenue - first_total_revenue) * 100 / first_total_revenue) / years, 6)
-        except:
+        except (IndexError, Exception):
             return
         return dict(ttm=ttm, years=years)
 

@@ -63,9 +63,9 @@ async def main_block(message: Message, state: FSMContext):
         StocksRedis.clear()
         text = f"В список перезаписано {len(file_data)} тикеров"
         await state.set_state(AdminFSM.home)
-        scheduler.remove_all_jobs()
+        # scheduler.remove_all_jobs()
         await asyncio.sleep(5)
-        await SchedulerAPI.main_dispatcher()
+        # await SchedulerAPI.main_dispatcher()
     os.remove(path=file_name)
     kb = inline.home_kb()
     await message.answer(text, reply_markup=kb)
