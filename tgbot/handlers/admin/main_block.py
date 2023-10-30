@@ -52,7 +52,7 @@ async def main_block(callback: CallbackQuery, state: FSMContext):
     await bot.answer_callback_query(callback.id)
 
 
-@router.callback_query(F.data == "reset_scheuler")
+@router.callback_query(F.data == "reset_scheduler")
 async def main_block(callback: CallbackQuery):
     scheduler.remove_all_jobs()
     await SchedulerAPI.main_dispatcher()
