@@ -21,6 +21,7 @@ user_router = [
 
 async def main():
     logger.info("Starting bot")
+    scheduler.remove_all_jobs()
     await SchedulerAPI.create_task()
     rds.redis_start()
     dp.include_routers(

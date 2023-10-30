@@ -52,6 +52,15 @@ async def main_block(callback: CallbackQuery, state: FSMContext):
     await bot.answer_callback_query(callback.id)
 
 
+@router.callback_query(F.data == "reset_scheuler")
+async def main_block(callback: CallbackQuery):
+    scheduler.remove_all_jobs()
+    await SchedulerAPI.main_dispatcher()
+    text = "Scheduler has been reset"
+    await callback.message.answer(text)
+    await bot.answer_callback_query(callback.id)
+
+
 @router.message(F.document, AdminFSM.tickers)
 async def main_block(message: Message, state: FSMContext):
     file_name = excel.tickers_path
