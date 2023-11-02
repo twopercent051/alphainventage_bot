@@ -16,7 +16,7 @@ storage = RedisStorage(redis=r) if config.tg_bot.use_redis else MemoryStorage()
 bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
 dp = Dispatcher()
 scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
-scheduler.add_jobstore(jobstore="redis", jobs_key="stocks_jobs", run_times_key="stocks_times")
+# scheduler.add_jobstore(jobstore="redis", jobs_key="stocks_jobs", run_times_key="stocks_times")
 
 logger = logging.getLogger(__name__)
 log_level = logging.INFO
