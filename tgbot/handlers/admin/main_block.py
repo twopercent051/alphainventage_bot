@@ -6,7 +6,7 @@ from aiogram.types import Message, CallbackQuery, FSInputFile
 from aiogram.filters import Command
 from aiogram import F, Router
 
-from create_bot import bot, scheduler
+from create_bot import bot, scheduler, logger
 from .inline import InlineKeyboard
 from tgbot.misc.states import AdminFSM
 from tgbot.models.redis_connector import TickersRedis, StocksRedis
@@ -54,7 +54,11 @@ async def main_block(callback: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data == "reset_scheduler")
 async def main_block(callback: CallbackQuery):
-    scheduler.remove_all_jobs()
+    jobs = scheduler.get_jobs(jobstore="redis")
+    logger.warning(jobs)
+    scheduler.remove_all_jobs(jobstore="redis")
+    jobs = scheduler.get_jobs(jobstore="redis")
+    logger.warning(jobs)
     await SchedulerAPI.main_dispatcher()
     text = "Scheduler has been reset"
     await callback.message.answer(text)
