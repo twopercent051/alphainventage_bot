@@ -72,8 +72,8 @@ class SchedulerAPI:
                             tr_div_ps="---",
                             years="---")
                 text = [f"Ticker {ticker} 404 🤷"]
-            for user in admin_ids:
-                await bot.send_message(chat_id=user, text="\n".join(text))
+            # for user in admin_ids:
+            #     await bot.send_message(chat_id=user, text="\n".join(text))
             StocksRedis.create(data=data)
             unprocessed_ticker = cls.__get_next_ticker()
             if not unprocessed_ticker:
@@ -83,7 +83,4 @@ class SchedulerAPI:
 
     @classmethod
     async def create_task(cls):
-        scheduler.add_job(func=cls.main_dispatcher,
-                          trigger="interval",
-                          minutes=30,
-                          misfire_grace_time=None)
+        scheduler.add_job(func=cls.main_dispatcher, trigger="interval", seconds=4, misfire_grace_time=None)
