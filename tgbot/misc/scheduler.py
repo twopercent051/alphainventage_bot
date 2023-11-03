@@ -4,7 +4,7 @@ from typing import Optional
 
 from aiogram.types import FSInputFile
 
-from create_bot import scheduler, bot, config
+from create_bot import scheduler, bot, config, logger
 from tgbot.models.redis_connector import TickersRedis, StocksRedis
 from tgbot.services.api import AlphaAPI
 from tgbot.services.excel import ExcelFile
@@ -64,6 +64,7 @@ class SchedulerAPI:
                     f"TR / PS: {tr_div_ps} %",
                     f"Years: {total_revenue_ttm['years']}"
                 ]
+                logger.warning(ticker)
             else:
                 data = dict(ticker=ticker,
                             name="---",
@@ -72,8 +73,8 @@ class SchedulerAPI:
                             tr_div_ps="---",
                             years="---")
                 text = [f"Ticker {ticker} 404 🤷"]
-            # for user in admin_ids:
-            #     await bot.send_message(chat_id=user, text="\n".join(text))
+                for user in admin_ids:
+                    await bot.send_message(chat_id=user, text="\n".join(text))
             StocksRedis.create(data=data)
             unprocessed_ticker = cls.__get_next_ticker()
             if not unprocessed_ticker:
